@@ -6,8 +6,12 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) => const MaterialApp(
-        home: ProfileCard(),
+  Widget build(BuildContext context) => MaterialApp(
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+          useMaterial3: true,
+        ),
+        home: const ProfileCard(),
       );
 }
 
@@ -18,6 +22,7 @@ class ProfileCard extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: const Text('个人名片')),
         body: Center(
+          // 整体卡片容器：340 宽、16 留白、圆角 12、阴影（与源码一致）
           child: Container(
             width: 340,
             padding: const EdgeInsets.all(16),
@@ -32,9 +37,14 @@ class ProfileCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // 头像区（teal 底白字 + Stack/Positioned 在线点）+ 姓名与签名
                 const Row(children: [
                   Stack(clipBehavior: Clip.none, children: [
-                    CircleAvatar(radius: 28, child: Text('赵')),
+                    CircleAvatar(
+                      radius: 28,
+                      backgroundColor: Colors.teal,
+                      child: Text('赵', style: TextStyle(color: Colors.white, fontSize: 20)),
+                    ),
                     Positioned(
                       right: 0,
                       bottom: 0,
@@ -46,13 +56,15 @@ class ProfileCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('赵昱珊'),
-                        Text('计算机大二学生'),
+                        Text('赵昱珊',
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                        Text('计算机大二学生', style: TextStyle(color: Colors.black54)),
                       ],
                     ),
                   ),
                 ]),
                 const SizedBox(height: 12),
+                // 统计条容器（步骤二要求保留）：圆角 + 底色 + 留白
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   decoration: BoxDecoration(
@@ -63,19 +75,20 @@ class ProfileCard extends StatelessWidget {
                     for (final e in const [('7', '课程'), ('6', '项目'), ('2', '证书')])
                       Expanded(
                         child: Column(children: [
-                          Text(e.$1),
-                          Text(e.$2),
+                          Text(e.$1,
+                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                          Text(e.$2, style: const TextStyle(color: Colors.black54)),
                         ]),
                       ),
                   ]),
                 ),
                 const SizedBox(height: 12),
-                // 标签云（Wrap）
+                // 标签云（Chip）
                 const Wrap(spacing: 8, runSpacing: 6, children: [
-                  Text('Flutter'),
-                  Text('Java'),
-                  Text('美食'),
-                  Text('娱乐'),
+                  Chip(label: Text('Flutter')),
+                  Chip(label: Text('Java')),
+                  Chip(label: Text('美食')),
+                  Chip(label: Text('娱乐')),
                 ]),
               ],
             ),
